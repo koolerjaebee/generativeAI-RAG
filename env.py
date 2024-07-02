@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
-API_KEY_PRIMARY = os.getenv("API_KEY_PRIMARY_VAL")
+API_KEY_PRIMARY = os.getenv("API_KEY_PRIMARY")
 
 CHUNKING_API_URL = os.getenv("CHUNKING_API_URL")
 EMBEDDING_API_URL = os.getenv("EMBEDDING_API_URL")

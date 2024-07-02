@@ -23,7 +23,7 @@ class EmbeddingExecutor:
         }
         headers = {k: str(v) for k, v in headers.items()}
 
-        conn = http.client.HTTPSConnection(self._host)
+        conn = http.client.HTTPSConnection(self._host, timeout=3600)
         conn.request('POST', EMBEDDING_API_URL,
                      json.dumps(completion_request), headers)
         response = conn.getresponse()
@@ -36,6 +36,7 @@ class EmbeddingExecutor:
         if res['status']['code'] == '20000':
             return res['result']['embedding']
         else:
+            print(res)
             return 'Error'
 
 

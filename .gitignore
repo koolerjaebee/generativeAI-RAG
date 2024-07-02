@@ -161,3 +161,7 @@ cython_debug/
 
 .gitkeep
 *.docx
+
+# milvus
+volumes/
+embedEtcd.yaml

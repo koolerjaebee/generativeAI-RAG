@@ -24,7 +24,7 @@ class ChunkingExecutor:
         }
         headers = {k: str(v) for k, v in headers.items()}
 
-        conn = http.client.HTTPSConnection(self._host)
+        conn = http.client.HTTPSConnection(self._host, timeout=3600)
         conn.request('POST', CHUNKING_API_URL,
                      json.dumps(completion_request), headers)
         response = conn.getresponse()
@@ -38,7 +38,6 @@ class ChunkingExecutor:
             return res['result']['topicSeg']
         else:
             print(res)
-            print(res['status']['code'])
             return 'Error'
 
 

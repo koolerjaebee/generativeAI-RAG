@@ -2,6 +2,7 @@
 import os
 import argparse
 import json
+import time
 from langchain_community.document_loaders import Docx2txtLoader, PyMuPDFLoader
 from llama_index.core import SimpleDirectoryReader
 from llama_index.readers.file import (
@@ -69,10 +70,10 @@ if __name__ == '__main__':
                 "text": loader.text,  # 직접 값을 할당
                 "postProcess": False
             }
-            chunking_request_data_json = json.dumps(
-                chunking_request_data, ensure_ascii=False)
+            # chunking_request_data_json = json.dumps(
+            #     chunking_request_data, ensure_ascii=False)
             response_text = chunking_executor.execute(
-                chunking_request_data_json)
+                chunking_request_data)
             for paragraph in response_text:
                 chunked_document = {
                     "file_name": loader.metadata["file_name"],
@@ -80,9 +81,9 @@ if __name__ == '__main__':
                 }
                 chunked_data.append(chunked_document)
 
-        # print(len(chunked_data), chunked_data)
+        print(len(chunked_data), chunked_data)
 
-        raise Exception("Test")
+        # raise Exception("Test")
 
         # Embedding
         embedding_executor = EmbeddingExecutor(
@@ -94,14 +95,11 @@ if __name__ == '__main__':
 
         try:
             for i, chunked_document in enumerate(tqdm(chunked_data)):
-                embedding_request = {
-                    "text": chunked_document["text"]
-                }
-                embedding_request_data_json = json.dumps(
-                    embedding_request, ensure_ascii=False)
+                chunking_request_data = {"text": str(chunked_document['text'])}
                 embedding = embedding_executor.execute(
-                    embedding_request_data_json)
+                    chunking_request_data)
                 chunked_document["embedding"] = embedding
+                time.sleep(1)
         except ValueError as e:
             print(f"Error at document index {i} with error: {e}")
 
@@ -136,6 +134,8 @@ if __name__ == '__main__':
                                 schema=schema, using='default', shards_num=2)
 
         for item in chunked_data:
+            item['text'] = ", ".join(item['text'])
+
             file_name_list = [item['file_name']]
             text_list = [item['text']]
             embedding_list = [item['embedding']]
