@@ -164,4 +164,7 @@ cython_debug/
 
 # milvus
 volumes/
+data/
 embedEtcd.yaml
+*.pkl
+*.txt
